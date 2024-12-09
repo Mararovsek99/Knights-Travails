@@ -59,7 +59,7 @@ class KnightsTravails{
                 let newMove = new Node(move,procesNode);
                 //if new move is a target position, we must recreate the path
                 if (newMove.position[0] === targetPosition[0] && newMove.position[1] === targetPosition[1]) {
-                    debugger;
+
                     copyThis.findTarget = true;
                     
 
@@ -93,7 +93,7 @@ class KnightsTravails{
         BFS(forProcesing);
     }
     createPath(startNode,PathNode){
-        debugger;
+        
         let path = [PathNode];
         let currNode = PathNode;
 
@@ -108,7 +108,27 @@ class KnightsTravails{
         })
         let PathToString = `knightMoves([${startNode.position}],[${PathNode.position}]) == [${pathPositions}]`;
         //we console.log in format: knightMoves([3,3],[2,2]) == [[3,3],[4,1],[2,2]] which we want.
-        console.log(PathToString); 
+        console.log(PathToString);
+
+
+        //alternative result:
+        let secondVersionString = `You made it in ${path.length - 1} moves! Here's your path: `;
+        console.log(secondVersionString);
+        path.forEach(node =>{
+            console.log(`[${node.position[0]},${node.position[1]}]`);
+        })
+        
+        //second result:You made it in 6 moves! Here's your path: 
+        // [7,7]
+        // [5,6]
+        // [3,5]
+        // [1,4]
+        // [0,2]
+        // [2,1]
+        // [0,0]
+        
+
+        //end
         return;
     }
 }
