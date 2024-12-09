@@ -61,7 +61,7 @@ class KnightsTravails{
                 if (newMove.position[0] === targetPosition[0] && newMove.position[1] === targetPosition[1]) {
                     debugger;
                     copyThis.findTarget = true;
-                    console.log("we find solution: ", newMove);
+                    
 
                     let solution = copyThis.createPath(startNode,newMove);
                     return solution;
@@ -97,17 +97,22 @@ class KnightsTravails{
         let path = [PathNode];
         let currNode = PathNode;
 
-            while (currNode.parent) {
-                currNode = currNode.parent
-                path.unshift(currNode);
-                
-            }
+        while (currNode.parent) {
+            currNode = currNode.parent
+            path.unshift(currNode);
             
-            console.log("This is path: ",path);
-            return;
+        }
+        let pathPositions = [];
+        path.forEach(node =>{
+            pathPositions.push(`[${node.position}]`);
+        })
+        let PathToString = `knightMoves([${startNode.position}],[${PathNode.position}]) == [${pathPositions}]`;
+        //we console.log in format: knightMoves([3,3],[2,2]) == [[3,3],[4,1],[2,2]] which we want.
+        console.log(PathToString); 
+        return;
     }
 }
 
 let testMove = new KnightsTravails;
 
-testMove.Pathfinder([3,3],[2,2]);
+testMove.Pathfinder([7,7],[0,0]);
