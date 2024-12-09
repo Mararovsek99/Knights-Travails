@@ -1,7 +1,8 @@
 class Node{
-    constructor(position){
+    constructor(position,parent){
         this.position = position;
         this.moves = this.possibleMoves(position);
+        this.parent = parent;
 
     }
     possibleMoves([a,b]){ //sample like [3,3]
@@ -28,24 +29,85 @@ class Node{
 
 class KnightsTravails{
     constructor(){
-        this.visitedPositions = [];
+        this.visitedPositions = []; // must save all already visited positons
+        this.findTarget = false;
+        this.path = null;
     }
     Pathfinder(startPosition,targetPosition){
-        let queue = [];
+        let queue = []; //prepared queue for later processing in FIFO method.
 
-        let startNode = new Node(startPosition);
+        let startNode = new Node(startPosition); // this will be main element
+
         queue.push(startNode);
 
         this.visitedPositions.push(startNode);
 
-        function BFS(startNode){
-            let nextMoves = startNode.moves;
+        let copyThis = this;
 
+        //find path function
+        function BFS(procesNode){  
+            
+            
+            //get all possible moves from this node
+            let nextMoves = procesNode.moves;   
+
+            //for all next possible moves, check if this is target,
+            //if its not target then check if its been already visited,
+            // if its not already visited add moveNode to the queue
             nextMoves.forEach( move => {
-                newMove = new Node(move);
-                queue.push(newMove);
+                //make node for new move
+                let newMove = new Node(move,procesNode);
+                //if new move is a target position, we must recreate the path
+                if (newMove.position[0] === targetPosition[0] && newMove.position[1] === targetPosition[1]) {
+                    debugger;
+                    copyThis.findTarget = true;
+                    console.log("we find solution: ", newMove);
+
+                    let solution = copyThis.createPath(startNode,newMove);
+                    return solution;
+                }
+                //if its not a target, we chech if its been already visited
+                let isVisited = copyThis.visitedPositions.some(position =>
+                    position[0] === newMove.position[0] && position[1] === newMove.position[1]
+                );
+                if (isVisited) {
+                    return;
+                }
+                //if its not been visited, we add node in visitedPosition array, and add move to the queue
+                else{
+                    copyThis.visitedPositions.push(newMove);
+                    queue.push(newMove);
+                }
             })
+            if (copyThis.findTarget === false) {
+                //when we have all next moves in the queue,process the next Node in the queue
+                forProcesing = queue.shift();
+                BFS(forProcesing);
+            }
+            else{
+                return;
+            }
+            
         }
-        BFS(startNode);
+        let forProcesing = queue.shift();
+        BFS(forProcesing);
+    }
+    createPath(startNode,PathNode){
+        debugger;
+        let path = [PathNode];
+        let currNode = PathNode;
+
+            while (currNode.parent) {
+                currNode = currNode.parent
+                path.unshift(currNode);
+                
+            }
+            
+            console.log("This is path: ",path);
+            return;
     }
 }
+
+let testMove = new KnightsTravails;
+
+testMove.Pathfinder([3,3],[2,2]);
